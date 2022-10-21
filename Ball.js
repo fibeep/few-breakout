@@ -6,6 +6,7 @@ class Ball {
     this.dy = dy;
     this.radius = radius;
     this.color = color;
+    this.PI2 = Math.PI * 2;
   }
 
   move() {

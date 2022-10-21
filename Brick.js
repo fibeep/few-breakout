@@ -1,5 +1,5 @@
 class Brick {
-  constructor(x, y, width, height, color = objectColor) {
+  constructor(x, y, width, height, color = 'green') {
     this.x = x;
     this.y = y;
     this.status = 1;

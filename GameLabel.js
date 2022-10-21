@@ -1,5 +1,5 @@
 class GameLabel {
-  constructor(text, x, y, color, font = "16px Arial") {
+  constructor(text, x, y, color, font = '16px Arial') {
     this.text = text;
     this.x = x;
     this.y = y;
