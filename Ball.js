@@ -16,7 +16,7 @@ class Ball {
 
   render(ctx) {
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, PI2);
+    ctx.arc(this.x, this.y, this.radius, 0, this.PI2);
     ctx.fillStyle = this.color;
     ctx.fill();
     ctx.closePath();
