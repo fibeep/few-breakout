@@ -106,8 +106,6 @@ class Bricks {
   }
 }
 
-const bricks = new Bricks(brickColumnCount, brickRowCount);
-
 // Paddle Class
 
 class Paddle {
@@ -138,17 +136,6 @@ class Paddle {
   }
 }
 
-const paddle = new Paddle(
-  paddleXStart,
-  paddleYStart,
-  paddleWidth,
-  paddleHeight
-);
-
-// Background Class
-
-// Score Class
-
 class GameLabel {
   constructor(text, x, y, color, font = '16px Arial') {
     this.text = text;
@@ -166,141 +153,158 @@ class GameLabel {
   }
 }
 
-// Lives Class
+// Game Class
 
-const scoreLabel = new GameLabel('Score ', 8, 20);
-const livesLabel = new GameLabel('Lives ', canvas.width - 65, 20);
+class Game {
+  constructor() {
+    this.ball = new Ball(0, 0, 2, -2, ballRadius, objectColor);
+    this.paddle = new Paddle(
+      paddleXStart,
+      paddleYStart,
+      paddleWidth,
+      paddleHeight,
+    );
+    this.bricks = new Bricks(brickColumnCount, brickRowCount);
+    this.scoreLabel = new GameLabel('Score ', 8, 20);
+    this.livesLabel = new GameLabel('Lives ', canvas.width - 65, 20);
 
-livesLabel.value = 3;
+    // Status of keys being pressed to move paddle
+    this.rightPressed = false;
+    this.leftPressed = false;
 
-let ball = new Ball();
-
-resetBallAndPaddle();
-
-// Status of keys being pressed to move paddle
-let rightPressed = false;
-let leftPressed = false;
-
-// Moves mouse
-function mouseMoveHandler(e) {
-  const relativeX = e.clientX - canvas.offsetLeft;
-  if (relativeX > 0 && relativeX < canvas.width) {
-    paddle.moveTo(relativeX - paddle.width / 2, paddleYStart);
+    this.setup();
   }
-}
 
-// Indicates for key being pressed
-function keyDownHandler(e) {
-  if (e.key === 'Right' || e.key === 'ArrowRight') {
-    rightPressed = true;
-  } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-    leftPressed = true;
+  setup() {
+    this.livesLabel.value = 3;
+    this.resetBallAndPaddle();
+
+    // Listents to whether a key or the mouse is being pressed
+    // ******************** FIX THIS ******************************
+    document.addEventListener('keydown', this.keyDownHandler.bind(this), false);
+    document.addEventListener('keyup', this.keyUpHandler.bind(this), false);
+    document.addEventListener('mousemove', this.mouseMoveHandler.bind(this), false);
+    // ******************** FIX THIS ******************************
+
+    this.draw();
   }
-}
 
-// Indicates for key NOT being pressed
-function keyUpHandler(e) {
-  if (e.key === 'Right' || e.key === 'ArrowRight') {
-    rightPressed = false;
-  } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-    leftPressed = false;
+  resetBallAndPaddle() {
+    this.ball.x = canvas.width / 2;
+    this.ball.y = canvas.height - 30;
+    this.ball.dx = 2;
+    this.ball.dy = -2;
+    this.paddle.x = paddleXStart;
   }
-}
 
-// Listents to whether a key or the mouse is being pressed
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
-document.addEventListener('mousemove', mouseMoveHandler, false);
-
-// Detects collision between ball and bricks / paddle
-function collisionDetection() {
-  for (let c = 0; c < bricks.cols; c += 1) {
-    for (let r = 0; r < bricks.rows; r += 1) {
-      const brick = bricks.bricks[c][r];
-      if (brick.status === 1) {
-        if (
-          ball.x > brick.x &&
-          ball.x < brick.x + brickWidth &&
-          ball.y > brick.y &&
-          ball.y < brick.y + brickHeight
-        ) {
-          ball.dy = -ball.dy;
-          brick.status = 0;
-          scoreLabel.value += 1;
-          if (scoreLabel.value === bricks.cols * bricks.rows) {
-            // eslint-disable-next-line no-alert
-            alert('YOU WIN, CONGRATULATIONS!');
-            document.location.reload();
+  collisionDetection() {
+    for (let c = 0; c < this.bricks.cols; c += 1) {
+      for (let r = 0; r < this.bricks.rows; r += 1) {
+        const brick = this.bricks.bricks[c][r];
+        if (brick.status === 1) {
+          if (
+            this.ball.x > brick.x
+            && this.ball.x < brick.x + brickWidth
+            && this.ball.y > brick.y
+            && this.ball.y < brick.y + brickHeight
+          ) {
+            this.ball.dy = -this.ball.dy;
+            brick.status = 0;
+            this.scoreLabel.value += 1;
+            if (this.scoreLabel.value === this.bricks.cols * this.bricks.rows) {
+              // eslint-disable-next-line no-alert
+              alert('YOU WIN, CONGRATULATIONS!');
+              document.location.reload();
+            }
           }
         }
       }
     }
   }
-}
 
-// Draws the ball on canvas
-
-// Draws the paddle on canvas
-
-function resetBallAndPaddle() {
-  ball.x = canvas.width / 2;
-  ball.y = canvas.height - 30;
-  ball.dx = 2;
-  ball.dy = -2;
-  paddle.x = paddleXStart;
-}
-
-function movePaddle() {
-  if (rightPressed && paddle.x < canvas.width - paddle.width) {
-    paddle.moveBy(7, 0);
-  } else if (leftPressed && paddle.x > 0) {
-    paddle.moveBy(-7, 0);
+  movePaddle() {
+    if (this.rightPressed && this.paddle.x < canvas.width - this.paddle.width) {
+      this.paddle.moveBy(7, 0);
+    } else if (this.leftPressed && this.paddle.x > 0) {
+      this.paddle.moveBy(-7, 0);
+    }
   }
-}
 
-function collisionsWithCanvasAndPaddle() {
-  if (
-    ball.x + ball.dx > canvas.width - ballRadius ||
-    ball.x + ball.dx < ballRadius
-  ) {
-    ball.dx = -ball.dx;
-  }
-  if (ball.y + ball.dy < ballRadius) {
-    ball.dy = -ball.dy;
-  } else if (ball.y + ball.dy > canvas.height - ballRadius) {
-    if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-      // eslint-disable-next-line no-cond-assign
-      if ((ball.y -= paddleHeight)) {
-        ball.dy = -ball.dy;
-      }
-    } else {
-      livesLabel.value -= 1;
-      console.log(livesLabel.value);
-      if (!livesLabel.value < 1) {
-        // eslint-disable-next-line no-alert
-        alert('GAME OVER');
-        document.location.reload();
+  collisionsWithCanvasAndPaddle() {
+    if (
+      this.ball.x + this.ball.dx > canvas.width - this.ball.radius
+      || this.ball.x + this.ball.dx < this.ball.radius
+    ) {
+      this.ball.dx = -this.ball.dx;
+    }
+    if (this.ball.y + this.ball.dy < this.ball.radius) {
+      this.ball.dy = -this.ball.dy;
+    } else if (this.ball.y + this.ball.dy > canvas.height - this.ball.radius) {
+      if (
+        this.ball.x > this.paddle.x
+        && this.ball.x < this.paddle.x + this.paddle.width
+      ) {
+        // eslint-disable-next-line no-cond-assign
+        if ((this.ball.y -= paddleHeight)) {
+          this.ball.dy = -this.ball.dy;
+        }
       } else {
-        resetBallAndPaddle();
+        this.livesLabel.value -= 1;
+        console.log(this.livesLabel.value);
+        if (this.livesLabel.value < 1) {
+          // eslint-disable-next-line no-alert
+          alert('GAME OVER');
+          document.location.reload();
+        } else {
+          this.resetBallAndPaddle();
+        }
       }
     }
   }
-}
-// Draws the canvas and the entire game
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  bricks.render(ctx);
-  ball.render(ctx);
-  paddle.render(ctx);
-  collisionDetection();
-  scoreLabel.render(ctx);
-  livesLabel.render(ctx);
-  ball.move();
-  movePaddle();
-  collisionsWithCanvasAndPaddle();
 
-  // Re-draws screen
-  requestAnimationFrame(draw);
-}
+  keyDownHandler(e) {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+      this.rightPressed = true;
+    } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+      this.leftPressed = true;
+    }
+  }
 
-draw();
+  keyUpHandler(e) {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+      this.rightPressed = false;
+    } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+      this.leftPressed = false;
+    }
+  }
+
+  mouseMoveHandler(e) {
+    const relativeX = e.clientX - canvas.offsetLeft;
+    if (this.relativeX > 0 && relativeX < canvas.width) {
+      this.paddle.moveTo(relativeX - this.paddle.width / 2, paddleYStart);
+    }
+  }
+
+  draw() {
+    console.log('*** game.draw() ****', this);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    this.bricks.render(ctx);
+    this.ball.render(ctx);
+    this.paddle.render(ctx);
+    this.collisionDetection();
+    this.scoreLabel.render(ctx);
+    this.livesLabel.render(ctx);
+    this.ball.move();
+    this.movePaddle();
+    this.collisionsWithCanvasAndPaddle();
+
+    // ******************** FIX THIS ******************************
+    // Re-draws screen
+    requestAnimationFrame(() => {
+      this.draw();
+    });
+    // ******************** FIX THIS ******************************
+  }
+} // END OF GAME CLASS -----
+
+const game = new Game();
