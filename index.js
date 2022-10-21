@@ -1,12 +1,12 @@
 /* eslint-disable max-classes-per-file */
-const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
 // ------------------------
 // Constants
 //------------------------
 const ballRadius = 10;
 const PI2 = Math.PI * 2;
-const objectColor = "orange";
+const objectColor = 'orange';
 const paddleHeight = 10;
 const paddleWidth = 75;
 const paddleXStart = (canvas.width - paddleWidth) / 2;
@@ -111,7 +111,7 @@ const bricks = new Bricks(brickColumnCount, brickRowCount);
 // Paddle Class
 
 class Paddle {
-  constructor(x, y, width, height, color = "red") {
+  constructor(x, y, width, height, color = 'red') {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -150,7 +150,7 @@ const paddle = new Paddle(
 // Score Class
 
 class GameLabel {
-  constructor(text, x, y, color, font = "16px Arial") {
+  constructor(text, x, y, color, font = '16px Arial') {
     this.text = text;
     this.x = x;
     this.y = y;
@@ -168,8 +168,8 @@ class GameLabel {
 
 // Lives Class
 
-const scoreLabel = new GameLabel("Score ", 8, 20);
-const livesLabel = new GameLabel("Lives ", 165, 20);
+const scoreLabel = new GameLabel('Score ', 8, 20);
+const livesLabel = new GameLabel('Lives ', canvas.width - 65, 20);
 
 livesLabel.value = 3;
 
@@ -191,26 +191,26 @@ function mouseMoveHandler(e) {
 
 // Indicates for key being pressed
 function keyDownHandler(e) {
-  if (e.key === "Right" || e.key === "ArrowRight") {
+  if (e.key === 'Right' || e.key === 'ArrowRight') {
     rightPressed = true;
-  } else if (e.key === "Left" || e.key === "ArrowLeft") {
+  } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
     leftPressed = true;
   }
 }
 
 // Indicates for key NOT being pressed
 function keyUpHandler(e) {
-  if (e.key === "Right" || e.key === "ArrowRight") {
+  if (e.key === 'Right' || e.key === 'ArrowRight') {
     rightPressed = false;
-  } else if (e.key === "Left" || e.key === "ArrowLeft") {
+  } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
     leftPressed = false;
   }
 }
 
 // Listents to whether a key or the mouse is being pressed
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
+document.addEventListener('keydown', keyDownHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('mousemove', mouseMoveHandler, false);
 
 // Detects collision between ball and bricks / paddle
 function collisionDetection() {
@@ -229,7 +229,7 @@ function collisionDetection() {
           scoreLabel.value += 1;
           if (scoreLabel.value === bricks.cols * bricks.rows) {
             // eslint-disable-next-line no-alert
-            alert("YOU WIN, CONGRATULATIONS!");
+            alert('YOU WIN, CONGRATULATIONS!');
             document.location.reload();
           }
         }
@@ -278,7 +278,7 @@ function collisionsWithCanvasAndPaddle() {
       console.log(livesLabel.value);
       if (!livesLabel.value < 1) {
         // eslint-disable-next-line no-alert
-        alert("GAME OVER");
+        alert('GAME OVER');
         document.location.reload();
       } else {
         resetBallAndPaddle();
