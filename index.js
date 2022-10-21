@@ -149,7 +149,29 @@ const paddle = new Paddle(
 
 // Score Class
 
+class GameLabel {
+  constructor(text, x, y, color, font = "16px Arial") {
+    this.text = text;
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.value = 0;
+    this.font = font;
+  }
+
+  render(ctx) {
+    ctx.font = this.font;
+    ctx.fillStyle = this.color;
+    ctx.fillText(`${this.text}: ${this.value}`, this.x, this.y);
+  }
+}
+
 // Lives Class
+
+const scoreLabel = new GameLabel("Score ", 8, 20);
+const livesLabel = new GameLabel("Lives ", 165, 20);
+
+livesLabel.value = 3;
 
 let ball = new Ball();
 
@@ -158,9 +180,6 @@ resetBallAndPaddle();
 // Status of keys being pressed to move paddle
 let rightPressed = false;
 let leftPressed = false;
-// Lives and Initial Score
-let lives = 3;
-let score = 0;
 
 // Moves mouse
 function mouseMoveHandler(e) {
@@ -207,8 +226,8 @@ function collisionDetection() {
         ) {
           ball.dy = -ball.dy;
           brick.status = 0;
-          score += 1;
-          if (score === brickRowCount * brickColumnCount) {
+          scoreLabel.value += 1;
+          if (scoreLabel.value === bricks.cols * bricks.rows) {
             // eslint-disable-next-line no-alert
             alert("YOU WIN, CONGRATULATIONS!");
             document.location.reload();
@@ -217,20 +236,6 @@ function collisionDetection() {
       }
     }
   }
-}
-
-// Draws the score on canvas
-function drawScore() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = objectColor;
-  ctx.fillText(`Score: ${score}`, 8, 20);
-}
-
-// Draws the lives on canvas
-function drawLives() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = objectColor;
-  ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
 }
 
 // Draws the ball on canvas
@@ -269,8 +274,9 @@ function collisionsWithCanvasAndPaddle() {
         ball.dy = -ball.dy;
       }
     } else {
-      lives -= 1;
-      if (!lives) {
+      livesLabel.value -= 1;
+      console.log(livesLabel.value);
+      if (!livesLabel.value < 1) {
         // eslint-disable-next-line no-alert
         alert("GAME OVER");
         document.location.reload();
@@ -287,8 +293,8 @@ function draw() {
   ball.render(ctx);
   paddle.render(ctx);
   collisionDetection();
-  drawScore();
-  drawLives();
+  scoreLabel.render(ctx);
+  livesLabel.render(ctx);
   ball.move();
   movePaddle();
   collisionsWithCanvasAndPaddle();
