@@ -63,6 +63,52 @@ class Brick {
   }
 }
 
+class Bricks {
+  constructor(cols, rows) {
+    this.cols = cols;
+    this.rows = rows;
+    this.bricks = [];
+    this.init();
+  }
+
+  init() {
+    for (let c = 0; c < this.cols; c += 1) {
+      this.bricks[c] = [];
+      for (let r = 0; r < this.rows; r += 1) {
+        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+        this.bricks[c][r] = new Brick(
+          brickX,
+          brickY,
+          brickWidth,
+          brickHeight,
+          'blue',
+        );
+      }
+    }
+  }
+
+  render(ctx) {
+    for (let c = 0; c < this.cols; c += 1) {
+      for (let r = 0; r < this.rows; r += 1) {
+        const brick = this.bricks[c][r];
+        if (bricks.status === 1) {
+          brick.render(ctx);
+        }
+      }
+    }
+  }
+}
+
+const bricks = new Bricks(brickColumnCount, brickRowCount);
+// Paddle Class
+
+// Background Class
+
+// Score Class
+
+// Lives Class
+
 let ball = new Ball();
 
 let paddleX;
@@ -75,10 +121,6 @@ let leftPressed = false;
 // Lives and Initial Score
 let lives = 3;
 let score = 0;
-
-// Brick layout + setup
-const bricks = [];
-initializeBricks();
 
 // Moves mouse
 function mouseMoveHandler(e) {
@@ -111,23 +153,11 @@ document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
-
-
-function initializeBricks() {
-  for (let c = 0; c < brickColumnCount; c += 1) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount; r += 1) {
-      const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-      const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-      bricks[c][r] = new Brick(brickX, brickY, brickWidth, brickHeight, objectColor);
-    }
-  }
-}
 // Detects collision between ball and bricks / paddle
 function collisionDetection() {
-  for (let c = 0; c < brickColumnCount; c += 1) {
-    for (let r = 0; r < brickRowCount; r += 1) {
-      const brick = bricks[c][r];
+  for (let c = 0; c < bricks.cols; c += 1) {
+    for (let r = 0; r < bricks.rows; r += 1) {
+      const brick = bricks.bricks[c][r];
       if (brick.status === 1) {
         if (
           ball.x > brick.x &&
@@ -165,7 +195,6 @@ function drawLives() {
 
 // Draws the ball on canvas
 
-
 // Draws the paddle on canvas
 function drawPaddle() {
   ctx.beginPath();
@@ -173,18 +202,6 @@ function drawPaddle() {
   ctx.fillStyle = objectColor;
   ctx.fill();
   ctx.closePath();
-}
-
-// Draws the bricks on canvas
-function drawBricks() {
-  for (let c = 0; c < brickColumnCount; c += 1) {
-    for (let r = 0; r < brickRowCount; r += 1) {
-      const brick = bricks[c][r];
-      if (bricks[c][r].status === 1) {
-        brick.render(ctx)
-      }
-    }
-  }
 }
 
 function resetBallAndPaddle() {
@@ -238,7 +255,7 @@ function collisionsWithCanvasAndPaddle() {
 // Draws the canvas and the entire game
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBricks();
+  bricks.render(ctx);
   ball.render(ctx);
   drawPaddle();
   collisionDetection();
