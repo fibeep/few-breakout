@@ -136,7 +136,7 @@ class Game {
       } else {
         this.livesLabel.value -= 1;
         console.log(this.livesLabel.value);
-        if (this.livesLabel.value < 1) {
+        if (this.livesLabel.value === 0) {
           // eslint-disable-next-line no-alert
           alert('GAME OVER');
           document.location.reload();
