@@ -5,7 +5,7 @@ class Game {
     this.ctx = this.canvas.getContext("2d");
 
     this.ballRadius = 10;
-    this.objectColor = 'red';
+    this.objectColor = 'green';
     this.paddleHeight = 10;
     this.paddleWidth = 75;
     this.paddleXStart = (this.canvas.width - this.paddleWidth) / 2;
@@ -40,8 +40,8 @@ class Game {
       color: this.objectColor,
     });
 
-    this.scoreLabel = new GameLabel('Score ', 8, 20);
-    this.livesLabel = new GameLabel('Lives ', this.canvas.width - 65, 20);
+    this.scoreLabel = new GameLabel('Score ', 8, 20, this.objectColor);
+    this.livesLabel = new GameLabel('Lives ', this.canvas.width - 65, 20, 'orange');
 
     // Status of keys being pressed to move paddle
     this.rightPressed = false;
