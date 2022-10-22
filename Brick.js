@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 class Brick extends Sprite {
   constructor(x, y, width, height, color) {
     super(x, y, width, height, color);

@@ -22,7 +22,7 @@ class Game {
     this.brickOffsetLeft = 30;
 
     this.ball = new Ball(0, 0, 2, -2, this.ballRadius, this.objectColor);
-    this.paddle = new Paddle(
+    this.paddle = new Sprite(
       this.paddleXStart,
       this.paddleYStart,
       this.paddleWidth,
