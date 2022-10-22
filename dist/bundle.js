@@ -1,0 +1,1 @@
+new Game("myCanvas");
