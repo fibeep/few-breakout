@@ -1,4 +1,10 @@
 /* eslint-disable quotes */
+
+import Ball from './Ball';
+import Bricks from './Bricks';
+import GameLabel from './GameLabel';
+import Sprite from './Sprite';
+
 class Game {
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId);
@@ -191,3 +197,5 @@ class Game {
     // ******************** FIX THIS ******************************
   }
 }
+
+export default Game;

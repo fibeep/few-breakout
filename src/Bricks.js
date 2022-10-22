@@ -1,3 +1,6 @@
+
+import Brick from './Brick';
+
 class Bricks {
   constructor(options) {
     this.cols = options.cols;
@@ -40,3 +43,5 @@ class Bricks {
     }
   }
 }
+
+export default Bricks;

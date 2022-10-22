@@ -24,3 +24,5 @@ class Sprite {
     ctx.fill();
   }
 }
+
+export default Sprite;

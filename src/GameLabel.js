@@ -1,3 +1,7 @@
+
+import Game from './Game';
+import Sprite from './Sprite';
+
 class GameLabel extends Sprite {
   constructor(text, x, y, color, font = "16px Arial") {
     super(x, y, 0, 0, color);
@@ -12,3 +16,5 @@ class GameLabel extends Sprite {
     ctx.fillText(`${this.text}: ${this.value}`, this.x, this.y);
   }
 }
+
+export default GameLabel;
