@@ -141,7 +141,7 @@ class Game {
         }
       } else {
         this.livesLabel.value -= 1;
-        console.log(this.livesLabel.value);
+        // console.log(this.livesLabel.value);
         if (this.livesLabel.value === 0) {
           // eslint-disable-next-line no-alert
           alert('GAME OVER');
@@ -177,7 +177,7 @@ class Game {
   }
 
   draw() {
-    console.log('*** game.draw() ****', this);
+    // console.log('*** game.draw() ****', this);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.bricks.render(this.ctx);
     this.ball.render(this.ctx);
